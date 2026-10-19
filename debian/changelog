@@ -1,0 +1,5 @@
+yamcs (5.13.8~SNAPSHOT) UNRELEASED; urgency=medium
+
+  * Package the server, web interface, and administration tools.
+
+ -- Yasushi SHOJI <yashi@spacecubics.com>  Fri, 16 Oct 2026 20:00:00 +0900

@@ -1,0 +1,37 @@
+#!/usr/bin/make -f
+
+include /usr/share/dpkg/pkg-info.mk
+
+export JAVA_HOME ?= $(patsubst %/bin/javac,%,$(realpath /usr/bin/javac))
+export DEB_MAVEN_REPO ?= $(CURDIR)/debian/.cache/maven
+export npm_config_cache = $(CURDIR)/debian/.cache/npm
+export NG_CLI_ANALYTICS = false
+
+WEBAPP = yamcs-web/src/main/webapp
+MVN = mvn -B -ntp -Dmaven.repo.local=$(DEB_MAVEN_REPO) -Dyamcs.revision=$(DEB_VERSION) -pl distribution,tests -am
+
+%:
+	dh $@ --buildsystem=none
+
+override_dh_auto_clean:
+	$(MVN) clean
+	rm -rf $(WEBAPP)/node_modules $(WEBAPP)/dist $(WEBAPP)/.angular tests/yamcs-data debian/.cache
+
+override_dh_auto_build:
+	cd $(WEBAPP) && npm ci --no-audit
+	cd $(WEBAPP) && npm run build
+	$(MVN) -Pbuild-distribution -DskipTests package
+
+override_dh_auto_test:
+	$(MVN) test
+
+override_dh_auto_install:
+	install -d debian/yamcs/opt/yamcs
+	tar -xzf distribution/target/yamcs-*-linux-x86_64.tar.gz \
+		--strip-components=1 --no-same-owner -C debian/yamcs/opt/yamcs
+
+override_dh_strip:
+	dh_strip --no-automatic-dbgsym
+
+override_dh_makeshlibs:
+	dh_makeshlibs -Xopt/yamcs

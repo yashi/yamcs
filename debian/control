@@ -1,0 +1,26 @@
+Source: yamcs
+Section: science
+Priority: optional
+Maintainer: Yasushi SHOJI <yashi@spacecubics.com>
+Build-Depends:
+ debhelper-compat (= 13),
+ default-jdk-headless | java17-sdk-headless,
+ maven (>= 3.6),
+ nodejs (>= 24.15),
+ nodejs (<< 25) | nodejs (>= 26),
+ npm (>= 8),
+Standards-Version: 4.7.4
+Rules-Requires-Root: no
+Homepage: https://yamcs.org
+
+Package: yamcs
+Architecture: amd64
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends},
+ default-jre-headless (>= 2:1.17) | java17-runtime-headless,
+Description: telemetry processing and mission control server
+ Yamcs processes, archives, and distributes telemetry and commands.
+ It includes a web interface and administration commands.
+ .
+ Each server process can host multiple configured Yamcs instances.

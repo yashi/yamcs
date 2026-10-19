@@ -13,3 +13,12 @@ server.lock
 
 #Vscode
 .vscode
+
+/debian/.cache/
+/debian/.debhelper/
+/debian/debhelper-build-stamp
+/debian/files
+/debian/*.debhelper.log
+/debian/*.substvars
+/debian/yamcs/
+/tests/yamcs-data/
